@@ -1,0 +1,7 @@
+----------- How to work React?
+    Componentlerı oluştururuz.
+    Yazdığımız jsx dosyalarını renderlayarak HTML ve Js dosyalarına çevirir.
+
+----------- JSX
+    
+    
