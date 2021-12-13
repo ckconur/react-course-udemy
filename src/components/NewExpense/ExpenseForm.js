@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import "./ExpenseForm.css";
 function ExpenseForm(props) {
+  const onCancel = props.onCancel;
   const [enteredTitle, setEnteredTitle] = useState("");
   const [enteredAmount, setEnteredAmount] = useState("");
   const [enteredDate, setEnteredDate] = useState("");
 
   const titleChangeHandler = (e) => {
-    setEnteredTitle(e.target.value.trim());
+    setEnteredTitle(e.target.value);
   };
 
   const amountChangeHandler = (e) => {
@@ -16,7 +17,6 @@ function ExpenseForm(props) {
   const dateChangeHandler = (e) => {
     setEnteredDate(e.target.value);
   };
-
   // const [userInput, setUserInput] = useState({
   //   enteredTitle: "",
   //   enteredAmount: "",
@@ -50,16 +50,25 @@ function ExpenseForm(props) {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    let d = new Date(enteredDate);
 
-    const newExpenseData = {
-      title: enteredTitle,
-      amount: enteredAmount,
-      date: new Date(enteredDate),
-    };
-    props.onSaveExpenseData(newExpenseData);
-    setEnteredTitle("");
-    setEnteredAmount("");
-    setEnteredDate("");
+    if (
+      Object.prototype.toString.call(d) === "[object Date]" &&
+      !isNaN(enteredAmount) &&
+      enteredTitle !== ""
+    ) {
+      const newExpenseData = {
+        title: enteredTitle,
+        amount: enteredAmount,
+        date: new Date(enteredDate),
+      };
+      props.onSaveExpenseData(newExpenseData);
+      setEnteredTitle("");
+      setEnteredAmount("");
+      setEnteredDate("");
+    } else {
+      console.log("Somethings wrong about inputs");
+    }
   };
 
   return (
@@ -78,6 +87,7 @@ function ExpenseForm(props) {
           <input
             type="number"
             value={enteredAmount}
+            step="any"
             min="0.01"
             onChange={amountChangeHandler}
           />
@@ -95,6 +105,9 @@ function ExpenseForm(props) {
       </div>
       <div className="new-expense__actions">
         <button type="submit">Add Expense</button>
+        <button type="button" onClick={onCancel}>
+          Cancel
+        </button>
       </div>
     </form>
   );
